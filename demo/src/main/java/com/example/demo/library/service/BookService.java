@@ -1,12 +1,16 @@
 package com.example.demo.library.service;
 
 
+import com.example.demo.library.model.dto.book.BookResponse;
 import com.example.demo.library.model.entity.Author;
 import com.example.demo.library.model.entity.Book;
 import com.example.demo.library.exceptions.AuthorIsRequiredException;
 import com.example.demo.library.exceptions.NotFoundException;
 import com.example.demo.library.repository.AuthorRepository;
 import com.example.demo.library.repository.BookRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -75,5 +79,33 @@ public class BookService {
                         .orElseThrow(() -> new NotFoundException("book not found"));
 
         repo.delete(book);
+    }
+
+    public List<Book> getByTitle(String title){return repo.findByTitleContainingIgnoreCase(title);};
+
+    public List<Book> getByGenre(String genre){return repo.findByGenreContainingIgnoreCase(genre);};
+
+    public List<Book> getByMinPrice(Double minPrice){return repo.findByPriceGreaterThan(minPrice);};
+
+    public List<Book> getByMaxPrice(Double maxPrice){return repo.findByPriceLessThan(maxPrice);};
+
+
+    public Page<BookResponse> getAllPaginated(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Book> books = repo.findAll(pageable);
+
+        return books.map(this::convertToResponse);
+    }
+
+
+    private BookResponse convertToResponse(Book book){
+        return new BookResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getGenre(),
+                book.getPrice(),
+                book.getAuthor().getFullname()
+        );
     }
 }

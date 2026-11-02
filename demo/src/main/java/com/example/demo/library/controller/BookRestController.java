@@ -1,7 +1,9 @@
 package com.example.demo.library.controller;
 
+import com.example.demo.library.model.dto.book.BookResponse;
 import com.example.demo.library.model.entity.Book;
 import com.example.demo.library.service.BookService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +17,14 @@ public class BookRestController {
 
     @GetMapping("/books")
     public List<Book> getAllBooks() { return bookService.getAll();}
+
+    @GetMapping("/paginated")
+    public Page<BookResponse> getAllPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        return bookService.getAllPaginated(page, size);
+    }
 
     @PostMapping("/books")
     public Book createBook(Book book) { return bookService.create(book); }

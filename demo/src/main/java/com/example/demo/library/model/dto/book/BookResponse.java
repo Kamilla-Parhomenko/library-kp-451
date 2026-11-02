@@ -22,4 +22,7 @@ public class BookResponse {
         this.price = price;
         this.author = author;
     }
+
+    public BookResponse(Long id, String title, String genre, Double price, String fullname) {
+    }
 }
