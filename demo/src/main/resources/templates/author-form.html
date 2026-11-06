@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Author Form</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav>
+  <h2>My Library</h2>
+  <div>
+    <a th:href="@{/library/books}">Books</a>
+    <a th:href="@{/library/authors}">Authors</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <div class="form-card">
+    <h1 th:text="${editMode} ? 'Edit Author' : 'Add Author'"></h1>
+
+    <form th:object="${authorRequest}"
+          th:action="${editMode}
+                  ? @{/library/authors/{id}/edit(id=${authorId})}
+                  : @{/library/authors/add}"
+          method="post">
+
+      <label>Full Name</label>
+      <input type="text" th:field="*{fullname}"
+             placeholder="Full Name">
+      <small th:errors="*{fullname}" class="error"></small>
+
+      <label>Country</label>
+      <input type="text" th:field="*{country}"
+             placeholder="Author's country">
+      <small th:errors="*{country}" class="error"></small>
+
+      <label>Style</label>
+      <input type="text" th:field="*{style}"
+             placeholder="Author's style">
+      <small th:errors="*{style}" class="error"></small>
+
+      <div class="form-actions">
+        <button type="submit" class="btn primary"
+                th:text="${editMode} ? 'Update Author' : 'Save Author'">
+        </button>
+
+        <a class="btn secondary"
+           th:href="@{/library/books}">
+          Cancel
+        </a>
+      </div>
+
+    </form>
+  </div>
+
+</main>
+</body>
+</html>

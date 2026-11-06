@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Authors | Library</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav>
+  <h2>My Library</h2>
+  <div>
+    <a th:href="@{/library/books}">Books</a>
+    <a th:href="@{/library/authors}">Authors</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <div class="header">
+    <div>
+      <h1>Authors</h1>
+      <p>Manage your authors</p>
+    </div>
+
+    <a class="btn primary" th:href="@{/library/authors/add}">
+      + Add Author
+    </a>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Full Name</th>
+        <th>Country</th>
+        <th>Style</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="author : ${authors}">
+        <td th:text="${author.id}"></td>
+        <td th:text="${author.fullname}"></td>
+        <td th:text="${author.country}"></td>
+        <td th:text="${author.style}"></td>
+
+        <td class="actions">
+          <a class="btn edit"
+             th:href="@{/library/authors/{id}/edit(id=${author.id})}">
+            Edit
+          </a>
+
+          <form th:action="@{/library/authors/{id}/delete(id=${author.id})}"
+                method="post">
+            <button class="btn delete"
+                    onclick="return confirm('Delete this author?')">
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <p th:if="${#lists.isEmpty(authors)}" class="empty">
+      No auhtors found.
+    </p>
+  </div>
+
+</main>
+</body>
+</html>
