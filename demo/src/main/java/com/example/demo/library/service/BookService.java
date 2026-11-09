@@ -30,7 +30,7 @@ public class BookService {
         return repo.findAll();
     }
 
-    public Book findById(Long id){
+    public Book getById(Long id){
         Book book = repo.findById(id)
                     .orElseThrow(() -> new NotFoundException("not found"));
 

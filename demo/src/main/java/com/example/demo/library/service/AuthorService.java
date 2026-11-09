@@ -1,9 +1,15 @@
 package com.example.demo.library.service;
 
+import com.example.demo.library.model.dto.author.AuthorResponse;
+import com.example.demo.library.model.dto.book.BookResponse;
 import com.example.demo.library.model.entity.Author;
 import com.example.demo.library.exceptions.CantBeNullException;
 import com.example.demo.library.exceptions.NotFoundException;
+import com.example.demo.library.model.entity.Book;
 import com.example.demo.library.repository.AuthorRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +25,7 @@ public class AuthorService {
 
     public List<Author> getAll() {return aurepo.findAll();}
 
-    public Author findById(Long id){
+    public Author getAuthorById(Long id){
         Author author = aurepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("not found"));
         return author;
@@ -52,5 +58,23 @@ public class AuthorService {
                 .orElseThrow(() -> new NotFoundException("not found"));
 
         aurepo.delete(author);
+    }
+
+    public Page<AuthorResponse> getAllPaginated(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Author> authors = aurepo.findAll(pageable);
+
+        return authors.map(this::convertToResponse);
+    }
+
+    private AuthorResponse convertToResponse(Author author){
+        return new AuthorResponse(
+                author.getId(),
+                author.getBirthdate(),
+                author.getFullname(),
+                author.getCountry()
+
+        );
     }
 }

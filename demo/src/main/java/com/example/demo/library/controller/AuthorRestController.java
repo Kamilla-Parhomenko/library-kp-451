@@ -1,7 +1,10 @@
 package com.example.demo.library.controller;
 
+import com.example.demo.library.model.dto.author.AuthorResponse;
+import com.example.demo.library.model.dto.book.BookResponse;
 import com.example.demo.library.model.entity.Author;
 import com.example.demo.library.service.AuthorService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,23 +18,34 @@ public class AuthorRestController {
         this.auservice = auservice;
     }
 
-    @GetMapping("/authors")
-    public List<Author> getAuthors(){
+    @GetMapping("/")
+    public List<Author> getAllAuthors(){
         return auservice.getAll();
     }
 
-    @PostMapping("/authors")
+    @GetMapping("/paginated")
+    public Page<AuthorResponse> getAllPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        return auservice.getAllPaginated(page, size);
+    }
+
+    @GetMapping("/{id}")
+    public Author getAuthorById(@PathVariable Long id){return auservice.getAuthorById(id);}
+
+    @PostMapping("/")
     public Author createAuthor(@RequestBody Author author){
         return auservice.create(author);
     }
 
-    @PutMapping("/authors")
-    public Author updateAuthor(@RequestBody Author author, Long id){
+    @PutMapping("/update/{id}")
+    public Author updateAuthor(@RequestBody Author author, @PathVariable Long id){
         return auservice.update(author, id);
     }
 
-    @DeleteMapping("/authors")
+    @DeleteMapping("/delete/{id}")
     public void deleteAuthor(Long id){
-
+        auservice.delete(id);
     }
 }
