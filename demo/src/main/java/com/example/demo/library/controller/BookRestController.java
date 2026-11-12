@@ -4,12 +4,14 @@ import com.example.demo.library.model.dto.book.BookResponse;
 import com.example.demo.library.model.entity.Author;
 import com.example.demo.library.model.entity.Book;
 import com.example.demo.library.service.BookService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/books")
 public class BookRestController {
 
     private final BookService bookService;
